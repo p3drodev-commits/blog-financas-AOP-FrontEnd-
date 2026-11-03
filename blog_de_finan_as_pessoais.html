@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanSmart - Blog de Finanças Pessoais e Investimentos</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#0f172a', // Deep slate/blue accent
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .page-section {
+            display: none;
+        }
+        .page-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col min-h-screen font-sans antialiased">
+
+    <!-- HEADER & NAVEGAÇÃO -->
+    <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                    <div class="bg-gradient-to-br from-emerald-400 to-green-600 p-2.5 rounded-xl text-slate-900 shadow-lg shadow-emerald-500/20">
+                        <i class="fa-solid fa-chart-line text-2xl"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-bold tracking-tight text-white">Finan<span class="text-emerald-400">Smart</span></span>
+                        <span class="block text-xs text-slate-400 uppercase tracking-widest font-semibold">Projeto Acadêmico</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Menu -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2" aria-label="Navegação Principal">
+                    <button onclick="navigateTo('home')" id="nav-home" class="nav-link px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 text-emerald-400 bg-slate-800">
+                        <i class="fa-solid fa-house mr-1.5"></i> Home
+                    </button>
+                    <button onclick="navigateTo('orcamento')" id="nav-orcamento" class="nav-link px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800">
+                        <i class="fa-solid fa-wallet mr-1.5"></i> Orçamento Pessoal
+                    </button>
+                    <button onclick="navigateTo('investimentos')" id="nav-investimentos" class="nav-link px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800">
+                        <i class="fa-solid fa-seedling mr-1.5"></i> Investimentos
+                    </button>
+                    <button onclick="navigateTo('aposentadoria')" id="nav-aposentadoria" class="nav-link px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800">
+                        <i class="fa-solid fa-piggy-bank mr-1.5"></i> Aposentadoria
+                    </button>
+                    <button onclick="navigateTo('contato')" id="nav-contato" class="nav-link px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-800">
+                        <i class="fa-solid fa-envelope mr-1.5"></i> Contato
+                    </button>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button" onclick="toggleMobileMenu()" class="text-slate-300 hover:text-white focus:outline-none p-2 rounded-md">
+                        <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div class="hidden md:hidden bg-slate-800 border-t border-slate-700 px-4 pt-2 pb-4 space-y-1 shadow-inner" id="mobile-menu">
+            <button onclick="navigateTo('home')" class="mobile-nav-link block w-full text-left px-3 py-2.5 rounded-md text-base font-medium text-white bg-emerald-600">
+                <i class="fa-solid fa-house w-6"></i> Home
+            </button>
+            <button onclick="navigateTo('orcamento')" class="mobile-nav-link block w-full text-left px-3 py-2.5 rounded-md text-base font-medium text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fa-solid fa-wallet w-6"></i> Orçamento Pessoal
+            </button>
+            <button onclick="navigateTo('investimentos')" class="mobile-nav-link block w-full text-left px-3 py-2.5 rounded-md text-base font-medium text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fa-solid fa-seedling w-6"></i> Investimentos
+            </button>
+            <button onclick="navigateTo('aposentadoria')" class="mobile-nav-link block w-full text-left px-3 py-2.5 rounded-md text-base font-medium text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fa-solid fa-piggy-bank w-6"></i> Aposentadoria
+            </button>
+            <button onclick="navigateTo('contato')" class="mobile-nav-link block w-full text-left px-3 py-2.5 rounded-md text-base font-medium text-slate-300 hover:bg-slate-700 hover:text-white">
+                <i class="fa-solid fa-envelope w-6"></i> Contato
+            </button>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL (MAIN) -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ================= PÁGINA 1: HOME ================= -->
+        <section id="page-home" class="page-section active space-y-12">
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-block bg-emerald-500/20 text-emerald-300 font-semibold text-xs px-3 py-1 rounded-full border border-emerald-500/30 mb-4 uppercase tracking-wider">Educação Financeira Descomplicada</span>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight text-white mb-4">
+                        Assuma o controle do seu <span class="text-emerald-400">futuro financeiro</span>.
+                    </h1>
+                    <p class="text-slate-300 text-base sm:text-lg mb-8 leading-relaxed">
+                        Bem-vindo ao **FinanSmart**! Este portal foi desenvolvido como um trabalho acadêmico dedicado a fornecer guias práticos, conceitos fundamentais e ferramentas interativas para ajudar você a gerir dívidas, economizar com inteligência e investir de forma segura.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <button onclick="navigateTo('orcamento')" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-6 py-3 rounded-xl transition duration-200 shadow-lg shadow-emerald-500/25 flex items-center gap-2">
+                            Comece Pelo Orçamento <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button onclick="navigateTo('investimentos')" class="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-white font-semibold px-6 py-3 rounded-xl transition duration-200">
+                            Aprender a Investir
+                        </button>
+                    </div>
+                </div>
+                <div class="absolute right-0 bottom-0 opacity-10 md:opacity-20 translate-x-12 translate-y-12 pointer-events-none">
+                    <i class="fa-solid fa-chart-pie text-[280px]"></i>
+                </div>
+            </div>
+
+            <!-- Resumo Explicativo da Funcionalidade -->
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                <div class="max-w-3xl">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info text-emerald-600"></i> Sobre este Portal
+                    </h2>
+                    <p class="text-slate-600 leading-relaxed mb-4">
+                        O projeto **FinanSmart** surge da necessidade de democratizar o conhecimento financeiro. Nossa plataforma organiza a jornada do conhecimento em 3 pilares estruturados: **Organização**, **Multiplicação** e **Preservação de Capital**. Navegue entre as seções temáticas, utilize nossas ferramentas de simulação visual e envie feedbacks para nossa equipe.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Cards de Conteúdos em Destaque -->
+            <div>
+                <div class="flex justify-between items-end mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Guia de Conteúdos em Destaque</h2>
+                        <p class="text-slate-500 text-sm">Clique na imagem ou no botão para acessar o artigo completo</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Card 1: Orçamento Pessoal -->
+                    <article class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group">
+                        <div class="relative overflow-hidden cursor-pointer h-48" onclick="navigateTo('orcamento')">
+                            <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80" alt="Orçamento Pessoal e Calculadora" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/0f172a/22c55e?text=Orcamento+Pessoal'">
+                            <span class="absolute top-3 left-3 bg-slate-900/80 text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm">Conteúdo #1</span>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition">Orçamento & Regra 50/30/20</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6 flex-grow">
+                                Descubra como organizar seus ganhos mensais utilizando o método 50/30/20, elimine despesas supérfluas e simule seu orçamento na prática.
+                            </p>
+                            <button onclick="navigateTo('orcamento')" class="w-full bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-800 font-semibold py-2.5 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2">
+                                Ler Artigo Completo <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Card 2: Investimentos -->
+                    <article class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group">
+                        <div class="relative overflow-hidden cursor-pointer h-48" onclick="navigateTo('investimentos')">
+                            <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?auto=format&fit=crop&w=600&q=80" alt="Investimentos para Iniciantes" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/0f172a/22c55e?text=Investimentos'">
+                            <span class="absolute top-3 left-3 bg-slate-900/80 text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm">Conteúdo #2</span>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition">Guia de Investimentos</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6 flex-grow">
+                                Entenda as diferenças entre Renda Fixa (CDB, Tesouro Direto) e Renda Variável (Ações, FIIs) e aprenda a dar o primeiro passo com segurança.
+                            </p>
+                            <button onclick="navigateTo('investimentos')" class="w-full bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-800 font-semibold py-2.5 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2">
+                                Ler Artigo Completo <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Card 3: Aposentadoria -->
+                    <article class="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group">
+                        <div class="relative overflow-hidden cursor-pointer h-48" onclick="navigateTo('aposentadoria')">
+                            <img src="https://images.unsplash.com/photo-1532619675605-1ede6c2ed2b0?auto=format&fit=crop&w=600&q=80" alt="Aposentadoria e Juros Compostos" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x400/0f172a/22c55e?text=Aposentadoria'">
+                            <span class="absolute top-3 left-3 bg-slate-900/80 text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-md backdrop-blur-sm">Conteúdo #3</span>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-emerald-600 transition">Planejamento & Aposentadoria</h3>
+                            <p class="text-slate-600 text-sm leading-relaxed mb-6 flex-grow">
+                                Descubra o poder do tempo e dos juros compostos na construção da sua liberdade financeira no longo prazo, com simulador integrado.
+                            </p>
+                            <button onclick="navigateTo('aposentadoria')" class="w-full bg-slate-100 hover:bg-emerald-600 hover:text-white text-slate-800 font-semibold py-2.5 px-4 rounded-xl transition duration-200 flex items-center justify-center gap-2">
+                                Ler Artigo Completo <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </button>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PÁGINA 2: ORÇAMENTO PESSOAL ================= -->
+        <section id="page-orcamento" class="page-section space-y-8">
+            <div class="bg-white rounded-2xl p-6 sm:p-10 border border-slate-200 shadow-sm">
+                <div class="max-w-4xl space-y-6">
+                    <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Conteúdo #1 - Gestão de Finanças</span>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Como Dominar Seu Orçamento com a Regra 50/30/20</h1>
+                    <p class="text-slate-500 text-sm border-b border-slate-100 pb-4">Publicado em Educação Financeira • Leitura de 4 min</p>
+
+                    <div class="prose prose-slate max-w-none text-slate-600 space-y-4">
+                        <p class="text-lg leading-relaxed font-normal text-slate-700">
+                            Organizar as finanças pessoais costuma parecer uma tarefa complexa, mas o segredo reside na simplicidade da categorização. O método 50/30/20 é um dos modelos mais eficientes no mundo para alocar sua renda líquida de maneira equilibrada.
+                        </p>
+                        
+                        <div class="grid md:grid-cols-3 gap-4 my-6">
+                            <div class="p-5 rounded-xl bg-emerald-50 border border-emerald-200">
+                                <h4 class="font-bold text-emerald-900 text-lg mb-1">50% - Necessidades</h4>
+                                <p class="text-xs text-emerald-700">Gastos essenciais como aluguel, luz, água, alimentação, transporte e plano de saúde.</p>
+                            </div>
+                            <div class="p-5 rounded-xl bg-blue-50 border border-blue-200">
+                                <h4 class="font-bold text-blue-900 text-lg mb-1">30% - Desejos</h4>
+                                <p class="text-xs text-blue-700">Lazer, jantares fora, viagens, assinaturas de streaming e hobbies pessoais.</p>
+                            </div>
+                            <div class="p-5 rounded-xl bg-purple-50 border border-purple-200">
+                                <h4 class="font-bold text-purple-900 text-lg mb-1">20% - Objetivos</h4>
+                                <p class="text-xs text-purple-700">Reserva de emergência, pagamento de dívidas e investimentos para o futuro.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Simulação interativa do Orçamento -->
+                <div class="mt-10 pt-8 border-t border-slate-200">
+                    <h3 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-calculator text-emerald-600"></i> Calculadora Rápida do Orçamento 50/30/20
+                    </h3>
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 max-w-2xl">
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Informe sua Renda Líquida Mensal (R$):</label>
+                        <div class="flex gap-4 mb-6">
+                            <input type="number" id="input-renda" value="4000" placeholder="Ex: 4000" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none font-semibold text-slate-800">
+                            <button onclick="calcularOrcamento()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl transition">Calcular</button>
+                        </div>
+
+                        <div class="space-y-3" id="resultado-orcamento">
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg border border-slate-200">
+                                <span class="text-sm font-medium text-slate-700">Essential (Necessidades - 50%)</span>
+                                <span class="font-bold text-emerald-700" id="res-50">R$ 2.000,00</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg border border-slate-200">
+                                <span class="text-sm font-medium text-slate-700">Style (Desejos Pessoais - 30%)</span>
+                                <span class="font-bold text-blue-700" id="res-30">R$ 1.200,00</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white rounded-lg border border-slate-200">
+                                <span class="text-sm font-medium text-slate-700">Future (Investimentos - 20%)</span>
+                                <span class="font-bold text-purple-700" id="res-20">R$ 800,00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PÁGINA 3: INVESTIMENTOS PARA INICIANTES ================= -->
+        <section id="page-investimentos" class="page-section space-y-8">
+            <div class="bg-white rounded-2xl p-6 sm:p-10 border border-slate-200 shadow-sm">
+                <div class="max-w-4xl space-y-6">
+                    <span class="bg-blue-100 text-blue-800 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Conteúdo #2 - Guia Prático</span>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900">Renda Fixa vs Renda Variável: Por onde começar?</h1>
+                    <p class="text-slate-500 text-sm border-b border-slate-100 pb-4">Publicado em Mercado Financeiro • Leitura de 6 min</p>
+
+                    <p class="text-lg text-slate-700 leading-relaxed">
+                        Para quem está começando no mundo dos investimentos, entender o binômio **Risco vs Retorno** é essencial. Existem duas grandes modalidades no mercado financeiro:
+                    </p>
+
+                    <div class="grid md:grid-cols-2 gap-6 my-6">
+                        <div class="border border-slate-200 p-6 rounded-2xl hover:border-emerald-500 transition">
+                            <div class="w-12 h-12 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">1. Renda Fixa</h3>
+                            <p class="text-slate-600 text-sm mb-4">Você "empresta" dinheiro para o governo ou instituições bancárias em troca de uma remuneração previsível.</p>
+                            <ul class="text-xs space-y-2 text-slate-600">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> <strong>Tesouro Direto:</strong> Garantido pelo Governo Federal</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> <strong>CDBs:</strong> Títulos emitidos por bancos (protegidos pelo FGC)</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> <strong>LCI/LCA:</strong> Isentos de Imposto de Renda</li>
+                            </ul>
+                        </div>
+
+                        <div class="border border-slate-200 p-6 rounded-2xl hover:border-blue-500 transition">
+                            <div class="w-12 h-12 bg-blue-100 text-blue-700 rounded-xl flex items-center justify-center text-xl mb-4">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">2. Renda Variável</h3>
+                            <p class="text-slate-600 text-sm mb-4">Você se torna sócio de empresas ou empreendimentos imobiliários. O retorno oscila de acordo com o mercado.</p>
+                            <ul class="text-xs space-y-2 text-slate-600">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-500"></i> <strong>Ações:</strong> Frações de capital de grandes empresas</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-500"></i> <strong>FIIs:</strong> Fundos Imobiliários com dividendos mensais</li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-blue-500"></i> <strong>ETFs:</strong> Fundos associados a índices de mercado</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PÁGINA 4: APOSENTADORIA & JUROS COMPOSTOS ================= -->
+        <section id="page-aposentadoria" class="page-section space-y-8">
+            <div class="bg-white rounded-2xl p-6 sm:p-10 border border-slate-200 shadow-sm">
+                <div class="max-w-4xl space-y-6">
+                    <span class="bg-purple-100 text-purple-800 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Conteúdo #3 - Longo Prazo</span>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900">A Mágica dos Juros Compostos e a Liberdade Financeira</h1>
+                    <p class="text-slate-500 text-sm border-b border-slate-100 pb-4">Publicado em Planejamento Financeiro • Leitura de 5 min</p>
+
+                    <p class="text-slate-600 leading-relaxed">
+                        Como disse Albert Einstein, *"Os juros compostos são a oitava maravilha do mundo"*. No longo prazo, aportar quantias mensais de forma constante pode gerar um patrimônio significativo devido ao efeito bola de neve dos juros sobre juros.
+                    </p>
+
+                    <!-- Simulação de Juros Compostos -->
+                    <div class="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 mt-6">
+                        <h3 class="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-calculator"></i> Simulador de Aposentadoria (Juros Compostos)
+                        </h3>
+
+                        <div class="grid md:grid-cols-3 gap-4 mb-6">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Aporte Inicial (R$)</label>
+                                <input type="number" id="juros-inicial" value="1000" class="w-full bg-slate-800 border border-slate-700 text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-400 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Aporte Mensal (R$)</label>
+                                <input type="number" id="juros-mensal" value="500" class="w-full bg-slate-800 border border-slate-700 text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-400 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Anos de Investimento</label>
+                                <input type="number" id="juros-anos" value="20" class="w-full bg-slate-800 border border-slate-700 text-white rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-400 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <button onclick="simularJurosCompostos()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 rounded-xl transition">
+                            Simular Patrimônio Acumulado
+                        </button>
+
+                        <div class="mt-6 pt-6 border-t border-slate-800 grid sm:grid-cols-2 gap-4">
+                            <div class="bg-slate-800 p-4 rounded-xl">
+                                <span class="text-xs text-slate-400 block mb-1">Total Investido (Do seu bolso)</span>
+                                <span class="text-xl font-bold text-slate-200" id="res-investido">R$ 121.000,00</span>
+                            </div>
+                            <div class="bg-slate-800 p-4 rounded-xl border border-emerald-500/30">
+                                <span class="text-xs text-emerald-400 block mb-1">Total Estimado (Com Juros ~10% a.a.)</span>
+                                <span class="text-2xl font-extrabold text-emerald-400" id="res-total">R$ 382.700,00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ================= PÁGINA 5: CONTATO & EQUIPE ACADÊMICA ================= -->
+        <section id="page-contato" class="page-section space-y-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Form de Contato -->
+                <div class="md:col-span-2 bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                    <h2 class="text-2xl font-bold text-slate-900 mb-2">Fale Conosco</h2>
+                    <p class="text-slate-600 text-sm mb-6">Envie suas dúvidas, sugestões ou feedbacks sobre o trabalho acadêmico.</p>
+
+                    <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">Nome Completo *</label>
+                                <input type="text" required placeholder="Seu nome" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">E-mail *</label>
+                                <input type="email" required placeholder="seu@email.com" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Assunto *</label>
+                            <input type="text" required placeholder="Ex: Sugestão de melhoria" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Mensagem *</label>
+                            <textarea rows="4" required placeholder="Escreva sua mensagem aqui..." class="w-full border border-slate-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-emerald-500 focus:outline-none"></textarea>
+                        </div>
+                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-8 py-3 rounded-xl transition duration-200 shadow-md">
+                            Enviar Mensagem <i class="fa-solid fa-paper-plane ml-2 text-xs"></i>
+                        </button>
+                    </form>
+
+                    <!-- Mensagem de Sucesso (Oculta por padrão) -->
+                    <div id="form-success" class="hidden mt-4 p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-sm font-medium">
+                        <i class="fa-solid fa-circle-check mr-2"></i> Mensagem enviada com sucesso! Agradecemos o contato.
+                    </div>
+                </div>
+
+                <!-- Informações Acadêmicas -->
+                <div class="bg-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <span class="bg-emerald-500/20 text-emerald-300 font-semibold text-xs px-2.5 py-1 rounded-full border border-emerald-500/30 uppercase">Ficha Técnica</span>
+                        <h3 class="text-xl font-bold mt-4 mb-4">Equipe de Desenvolvimento</h3>
+                        <div class="space-y-4 text-slate-300 text-sm">
+                            <div>
+                                <span class="text-xs text-slate-400 uppercase font-semibold block">Instituição de Ensino</span>
+                                <p class="font-medium text-white">Universidade Tecnológica</p>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-400 uppercase font-semibold block">Curso / Disciplina</span>
+                                <p class="font-medium text-white">Desenvolvimento Web - Frontend</p>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-400 uppercase font-semibold block">Estudantes</span>
+                                <ul class="list-disc list-inside space-y-1 mt-1 text-slate-200">
+                                    <li>Gabriel Santos (RA: 123456)</li>
+                                    <li>Mariana Oliveira (RA: 654321)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-6 border-t border-slate-800 mt-6">
+                        <p class="text-xs text-slate-400">Projeto desenvolvido estritamente para fins acadêmicos e pedagógicos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER DO BLOG -->
+    <footer class="bg-slate-900 border-t border-slate-800 text-slate-400 py-10 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <!-- Branding -->
+                <div class="flex items-center gap-3">
+                    <div class="bg-emerald-500 p-2 rounded-lg text-slate-900">
+                        <i class="fa-solid fa-chart-line text-lg"></i>
+                    </div>
+                    <span class="text-xl font-bold text-white tracking-tight">Finan<span class="text-emerald-400">Smart</span></span>
+                </div>
+
+                <!-- Footer Navigation -->
+                <nav class="flex flex-wrap justify-center gap-6 text-sm font-medium">
+                    <button onclick="navigateTo('home')" class="hover:text-emerald-400 transition">Home</button>
+                    <button onclick="navigateTo('orcamento')" class="hover:text-emerald-400 transition">Orçamento Pessoal</button>
+                    <button onclick="navigateTo('investimentos')" class="hover:text-emerald-400 transition">Investimentos</button>
+                    <button onclick="navigateTo('aposentadoria')" class="hover:text-emerald-400 transition">Aposentadoria</button>
+                    <button onclick="navigateTo('contato')" class="hover:text-emerald-400 transition">Contato</button>
+                </nav>
+
+                <!-- Copyright -->
+                <div class="text-xs text-center md:text-right text-slate-500">
+                    <p>&copy; 2026 FinanSmart Blog. Todos os direitos reservados.</p>
+                    <p>Trabalho Acadêmico de Desenvolvimento Web.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- LÓGICA DE NAVEGAÇÃO E SIMULAÇÕES (JAVASCRIPT) -->
+    <script>
+        // Função para Navegação entre Páginas/Seções (SPA)
+        function navigateTo(pageId) {
+            // Ocultar todas as seções
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(sec => sec.classList.remove('active'));
+
+            // Mostrar a seção selecionada
+            const targetSection = document.getElementById('page-' + pageId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+
+            // Atualizar estilo dos botões da barra de navegação no Desktop
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('text-emerald-400', 'bg-slate-800');
+                link.classList.add('text-slate-300');
+            });
+
+            const activeNav = document.getElementById('nav-' + pageId);
+            if (activeNav) {
+                activeNav.classList.add('text-emerald-400', 'bg-slate-800');
+                activeNav.classList.remove('text-slate-300');
+            }
+
+            // Rolar para o topo da página suavemente
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Fechar menu mobile caso esteja aberto
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (!mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+        }
+
+        // Toggle para Menu Mobile
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Lógica da Calculadora de Orçamento 50/30/20
+        function calcularOrcamento() {
+            const rendaInput = parseFloat(document.getElementById('input-renda').value);
+            if (isNaN(rendaInput) || rendaInput <= 0) return;
+
+            const res50 = rendaInput * 0.50;
+            const res30 = rendaInput * 0.30;
+            const res20 = rendaInput * 0.20;
+
+            const format = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+            document.getElementById('res-50').textContent = format(res50);
+            document.getElementById('res-30').textContent = format(res30);
+            document.getElementById('res-20').textContent = format(res20);
+        }
+
+        // Lógica do Simulador de Juros Compostos
+        function simularJurosCompostos() {
+            const inicial = parseFloat(document.getElementById('juros-inicial').value) || 0;
+            const mensal = parseFloat(document.getElementById('juros-mensal').value) || 0;
+            const anos = parseInt(document.getElementById('juros-anos').value) || 0;
+            
+            const taxaAnual = 0.10; // Taxa de 10% a.a. estimada
+            const taxaMensal = Math.pow(1 + taxaAnual, 1/12) - 1;
+            const meses = anos * 12;
+
+            let totalAcumulado = inicial;
+            let totalInvestido = inicial;
+
+            for (let i = 0; i < meses; i++) {
+                totalAcumulado = (totalAcumulado + mensal) * (1 + taxaMensal);
+                totalInvestido += mensal;
+            }
+
+            const format = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+            document.getElementById('res-investido').textContent = format(totalInvestido);
+            document.getElementById('res-total').textContent = format(totalAcumulado);
+        }
+
+        // Tratamento do Formulário de Contato
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const successMsg = document.getElementById('form-success');
+            successMsg.classList.remove('hidden');
+            document.getElementById('contact-form').reset();
+            setTimeout(() => {
+                successMsg.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
